@@ -8,13 +8,13 @@ spec:
   selector:
     matchLabels:
       app: sample-app
-    template:
-      metadata:
-        labels:
-          app: sample-app
-      spec:
-        containers:
-          - name: sample
-            image: nginx:latest
-            ports:
-              - containerPort: 80
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+        - name: sample
+          image: nginx:latest
+          ports:
+            - containerPort: 80
