@@ -12,7 +12,12 @@ spec:
     metadata:
       labels:
         app: sample-app
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "tl-test"
+        vault.hashicorp.com/agent-inject-secret-test: "secret/data/test"
     spec:
+      serviceAccountName: tl-test-sa
       containers:
         - name: sample
           image: nginx:latest
