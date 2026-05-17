@@ -20,6 +20,6 @@ spec:
       serviceAccountName: tl-test-sa
       containers:
         - name: sample
-          image: nginx:latest
+          image: 307217365914.dkr.ecr.us-east-1.amazonaws.com/trendlink-app:7bbbda16d131c915dc1062bf965162b816077911
           ports:
             - containerPort: 80
