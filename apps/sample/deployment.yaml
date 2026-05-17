@@ -20,6 +20,6 @@ spec:
       serviceAccountName: tl-test-sa
       containers:
         - name: sample
-          image: 307217365914.dkr.ecr.us-east-1.amazonaws.com/trendlink-app:7bbbda16d131c915dc1062bf965162b816077911
+          image: 307217365914.dkr.ecr.us-east-1.amazonaws.com/trendlink-app:c742ffdc8d0b562dc8fd98db202c32bddc1e2678
           ports:
             - containerPort: 80
