@@ -18,6 +18,8 @@ spec:
         vault.hashicorp.com/agent-inject-secret-test: "secret/data/test"
     spec:
       serviceAccountName: tl-test-sa
+      imagePullSecrets:
+        -name: ecr-secret
       containers:
         - name: sample
           image: 307217365914.dkr.ecr.us-east-1.amazonaws.com/trendlink-app:c742ffdc8d0b562dc8fd98db202c32bddc1e2678
