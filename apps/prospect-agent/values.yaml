@@ -17,11 +17,11 @@ ingress:
 
 resources:
   requests:
-    memory: "128Mi"
-    cpu: "100m"
+    memory: "64Mi"
+    cpu: "150m"
   limits:
-    memory: "256Mi"
-    cpu: "500m"
+    memory: "128Mi"
+    cpu: "200m"
 
 env:
   AWS_REGION: us-east-1
