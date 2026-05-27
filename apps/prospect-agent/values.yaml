@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 307217365914.dkr.ecr.us-east-1.amazonaws.com/trendlink-app
-  tag: d4641aca8e9565610ffab845a7978bb5eca213bd
+  tag: d11651d79651f8d629631bb6be782f484ba567fc
   pullPolicy: Always
 
 service:
