@@ -1,53 +1,33 @@
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: ecr-secret-rotator
-  namespace: secret-rotator
-spec:
-  schedule: "0 */6 * * *"
-  jobTemplate:
-    spec:
-      template:
-        metadata:
-          annotations:
-            vault.hashicorp.com/agent-inject: "true"
-            vault.hashicorp.com/role: "tl-prospect-agent"
-            vault.hashicorp.com/agent-inject-secret-aws: "secret/data/trendlink/aws-credentials"
-        spec:
-          serviceAccountName: ecr-rotator-sa
-          restartPolicy: OnFailure
-          volumes:
-          - name: shared-token
-            emptyDir: {}
-          initContainers:
-          - name: get-ecr-token
-            image: amazon/aws-cli:latest
-            command:
-            - /bin/sh
-            - -c
-            - |
-              AWS_ACCESS_KEY_ID=$(grep -o 'access_key_id:[^ ]*' /vault/secrets/aws | cut -d: -f2)
-              AWS_SECRET_ACCESS_KEY=$(grep -o 'secret_access_key:[^]]*' /vault/secrets/aws | cut -d: -f2)
-              export AWS_ACCESS_KEY_ID
-              export AWS_SECRET_ACCESS_KEY
-              aws ecr get-login-password --region us-east-1 > /shared/ecr-token
-            volumeMounts:
-            - name: shared-token
-              mountPath: /shared
-          containers:
-          - name: ecr-rotator
-            image: bitnami/kubectl:latest
-            command:
-            - /bin/sh
-            - -c
-            - |
-              TOKEN=$(cat /shared/ecr-token)
-              kubectl delete secret ecr-pull-secret --namespace=default --ignore-not-found
-              kubectl create secret docker-registry ecr-pull-secret \
-                --docker-server=307217365914.dkr.ecr.us-east-1.amazonaws.com \
-                --docker-username=AWS \
-                --docker-password=$TOKEN \
-                --namespace=default
-            volumeMounts:
-            - name: shared-token
-              mountPath: /shared
+replicaCount: 1
+
+image:
+  repository: 307217365914.dkr.ecr.us-east-1.amazonaws.com/trendlink-app
+  tag: d11651d79651f8d629631bb6be782f484ba567fc
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  host: trendlink.local
+  path: /prospect-agent
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "150m"
+  limits:
+    memory: "128Mi"
+    cpu: "200m"
+
+env:
+  AWS_REGION: us-east-1
+  DYNAMODB_TABLE: trendlink-prospects
+
+vault:
+  role: tl-prospect-agent
+  googlePlacesSecret: secret/data/trendlink/google-places-api-key
+  awsSecret: secret/data/trendlink/aws-credentials
