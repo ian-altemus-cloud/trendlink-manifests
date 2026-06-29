@@ -16,6 +16,10 @@ spec:
             enabled: false
           ha:
             enabled: false
+          dataStorage:
+            enabled: false
+          auditStorage:
+            enabled: false
         injector:
           enabled: true
   destination:
